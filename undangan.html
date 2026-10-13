@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wedding of Dimas & Ayu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c9a962;--gold-light:#e8d5a3;--black:#0a0a0a;--cream:#f5f0e8}
+body{font-family:'Cormorant Garamond',serif;background:var(--black);color:var(--cream);overflow-x:hidden}
+.script{font-family:'Great Vibes',cursive}
+#cover{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 30%,#2a2118 0%,#1a1a1a 40%,#0a0a0a 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;transition:transform 1s ease,opacity 1s ease}
+#cover.open{transform:translateY(-100%);opacity:0;pointer-events:none}
+#cover .ornament{font-size:40px;color:var(--gold);margin-bottom:10px}
+#cover h3{letter-spacing:4px;font-size:13px;color:var(--gold);text-transform:uppercase;margin-bottom:15px}
+#cover h1{font-family:'Great Vibes',cursive;font-size:52px;color:var(--gold-light);margin-bottom:15px}
+#cover p{color:#999;font-size:14px;margin-bottom:5px}
+#cover .guest{color:var(--gold);font-size:18px;margin:10px 0 25px;font-style:italic}
+#btnOpen{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:12px 35px;font-size:14px;letter-spacing:2px;cursor:pointer;border-radius:30px;transition:all .3s;font-family:inherit}
+#btnOpen:hover{background:var(--gold);color:#000}
+section{padding:70px 20px;max-width:600px;margin:0 auto;text-align:center}
+.divider{color:var(--gold);font-size:24px;margin:15px 0;letter-spacing:8px}
+h2.script{font-size:42px;color:var(--gold-light);margin-bottom:10px}
+.subtitle{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--gold);margin-bottom:20px}
+p.body{line-height:1.9;color:#ccc;font-size:17px;margin-bottom:15px}
+.couple-card{margin:30px 0}
+.couple-card h3.script{font-size:36px;color:var(--gold-light)}
+.couple-card .parents{color:#999;font-style:italic;font-size:15px;margin-top:8px;line-height:1.7}
+.amp{font-family:'Great Vibes',cursive;font-size:50px;color:var(--gold);margin:20px 0}
+#countdown{display:flex;justify-content:center;gap:12px;margin:25px 0}
+.cd-box{background:#1a1a1a;border:1px solid #333;border-radius:10px;padding:15px 5px;min-width:70px}
+.cd-box .num{font-size:28px;color:var(--gold);font-weight:700}
+.cd-box .lbl{font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase;margin-top:5px}
+.event-card{background:#141414;border:1px solid #2a2a2a;border-radius:15px;padding:30px 20px;margin:20px 0}
+.event-card h3{letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-size:16px;margin-bottom:15px}
+.event-card .date{font-size:22px;color:var(--gold-light);margin-bottom:5px}
+.event-card .time{color:#aaa;margin-bottom:15px}
+.event-card .venue{color:#ccc;line-height:1.7}
+.btn{display:inline-block;background:var(--gold);color:#000;padding:10px 25px;border-radius:25px;text-decoration:none;font-size:14px;letter-spacing:1px;margin-top:15px;font-weight:600}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.gallery .ph{aspect-ratio:3/4;background:linear-gradient(135deg,#2a2a2a,#1a1a1a);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:40px;border:1px solid #333}
+.story{margin:25px 0;text-align:left}
+.story-item{border-left:2px solid var(--gold);padding:0 0 25px 20px;margin-left:10px;position:relative}
+.story-item::before{content:'';position:absolute;left:-7px;top:0;width:12px;height:12px;background:var(--gold);border-radius:50%}
+.story-item h4{color:var(--gold-light);font-size:20px;margin-bottom:5px}
+.story-item p{color:#aaa;font-size:15px;line-height:1.7}
+.bank{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:20px;margin:15px 0}
+.bank .bank-name{color:var(--gold);font-size:18px;letter-spacing:2px;margin-bottom:5px}
+.bank .rek{font-size:22px;letter-spacing:2px;color:#fff;margin:10px 0}
+.bank .an{color:#999;font-size:14px}
+.btn-copy{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:8px 20px;border-radius:20px;cursor:pointer;margin-top:10px;font-size:13px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0;background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;font-family:inherit;font-size:15px}
+textarea{height:100px;resize:vertical}
+.btn-submit{background:var(--gold);color:#000;border:none;padding:14px;width:100%;border-radius:8px;font-size:16px;cursor:pointer;letter-spacing:1px;font-weight:700;margin-top:10px}
+.wish{background:#141414;border-radius:10px;padding:15px;margin:10px 0;text-align:left;border:1px solid #2a2a2a}
+.wish .w-name{color:var(--gold);font-weight:700}
+.wish .w-text{color:#ccc;margin-top:5px;font-size:15px;line-height:1.6}
+footer{padding:50px 20px;text-align:center;background:#0a0a0a}
+.verse{font-style:italic;color:#bbb;line-height:2;font-size:16px;padding:0 10px}
+.verse-src{color:var(--gold);margin-top:10px;font-size:14px;letter-spacing:1px}
+.hero-img{width:100%;max-width:600px;margin:0 auto;display:block;border-radius:0}
+.hero-wrap{position:relative;max-width:600px;margin:0 auto}
+.hero-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--black) 100%)}
+.ornament-img{width:120px;margin:10px auto;display:block;opacity:.9}
+</style>
+</head>
+<body>
+<div id="cover">
+  <div class="ornament">❦ ❦ ❦</div>
+  <h3>The Wedding Of</h3>
+  <h1>Dimas & Ayu</h1>
+  <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+  <div class="guest">Tamu Undangan</div>
+  <p style="font-size:12px">Mohon maaf apabila ada kesalahan penulisan nama & gelar</p><br>
+  <button id="btnOpen">✉ Buka Undangan</button>
+</div>
+<div style="text-align:center;padding:40px 20px;background:radial-gradient(ellipse at center,#2a2118 0%,#0a0a0a 70%)"><div style="font-size:80px">🏯</div><p style="color:var(--gold);letter-spacing:3px;font-size:12px;margin-top:10px">JAWA • HITAM • ELEGAN</p></div>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Assalamu'alaikum</h2>
+  <p class="body">Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan pernikahan putra-putri kami:</p>
+</section>
+<section>
+  <div class="couple-card">
+    <h3 class="script">Dimas Prasetyo</h3>
+    <p class="parents">Putra kedua dari Bapak H. Bambang Sutrisno<br>& Ibu Hj. Sri Wahyuni</p>
+  </div>
+  <div class="amp">&</div>
+  <div class="couple-card">
+    <h3 class="script">Ayu Lestari</h3>
+    <p class="parents">Putri pertama dari Bapak H. Agus Wijaya<br>& Ibu Hj. Dewi Sartika</p>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Save The Date</h2>
+  <p class="verse">"Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang."</p>
+  <p class="verse-src">— QS. Ar-Rūm: 21 —</p>
+  <div id="countdown">
+    <div class="cd-box"><div class="num" id="cd-d">00</div><div class="lbl">Hari</div></div>
+    <div class="cd-box"><div class="num" id="cd-h">00</div><div class="lbl">Jam</div></div>
+    <div class="cd-box"><div class="num" id="cd-m">00</div><div class="lbl">Menit</div></div>
+    <div class="cd-box"><div class="num" id="cd-s">00</div><div class="lbl">Detik</div></div>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Wedding Event</h2>
+  <div class="event-card">
+    <h3>💍 Akad Nikah</h3>
+    <p class="date">Sabtu, 20 Desember 2026</p>
+    <p class="time">08.00 WIB — Selesai</p>
+    <p class="venue">Kediaman Mempelai Wanita<br>Jl. Melati No. 45, Yogyakarta</p>
+  </div>
+  <div class="event-card">
+    <h3>🎉 Resepsi</h3>
+    <p class="date">Sabtu, 20 Desember 2026</p>
+    <p class="time">11.00 WIB — 14.00 WIB</p>
+    <p class="venue">Gedung Serbaguna Sasana Kriya<br>Jl. Brigjen Katamso, Yogyakarta</p>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Galeri</h2>
+  <p class="subtitle">Momen Bahagia Kami</p>
+  <div class="gallery">
+    <div class="ph">📷</div><div class="ph">💑</div>
+    <div class="ph">💒</div><div class="ph">❤️</div>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Love Story</h2>
+  <div class="story">
+    <div class="story-item"><h4>💫 Awal Bertemu</h4><p>Tahun 2019, kami dipertemukan dalam sebuah acara kampus. Siapa sangka perkenalan sederhana itu menjadi awal dari segalanya.</p></div>
+    <div class="story-item"><h4>💘 Menjalin Kasih</h4><p>Seiring berjalannya waktu, benih-benih cinta tumbuh. Kami melewati suka dan duka bersama, saling menguatkan.</p></div>
+    <div class="story-item"><h4>💍 Lamaran</h4><p>Dengan restu kedua keluarga, kami memutuskan untuk melangkah ke jenjang yang lebih serius pada awal tahun 2026.</p></div>
+    <div class="story-item"><h4>💒 Menuju Halal</h4><p>Kini kami siap mengikat janji suci dalam ikatan pernikahan. Mohon doa restu dari Bapak/Ibu/Saudara/i sekalian.</p></div>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Wedding Gift</h2>
+  <p class="body">Tanpa mengurangi rasa hormat, bagi yang berkenan memberikan tanda kasih:</p>
+  <div class="bank">
+    <p class="bank-name">🏦 BCA</p>
+    <p class="rek" id="rek1">1234567890</p>
+    <p class="an">a.n. Dimas Prasetyo</p>
+    <button class="btn-copy" onclick="copyRek('rek1')">Salin Nomor</button>
+  </div>
+  <div class="bank">
+    <p class="bank-name">🏦 Mandiri</p>
+    <p class="rek" id="rek2">0987654321</p>
+    <p class="an">a.n. Ayu Lestari</p>
+    <button class="btn-copy" onclick="copyRek('rek2')">Salin Nomor</button>
+  </div>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">RSVP</h2>
+  <p class="body">Mohon konfirmasi kehadiran Bapak/Ibu/Saudara/i:</p>
+  <form onsubmit="return submitRSVP(event)">
+    <input type="text" id="rsvpName" placeholder="Nama Lengkap" required>
+    <select id="rsvpAttend" required>
+      <option value="">— Konfirmasi Kehadiran —</option>
+      <option value="Hadir">Hadir, Insya Allah</option>
+      <option value="Tidak">Berhalangan</option>
+    </select>
+    <button type="submit" class="btn-submit">Kirim Konfirmasi</button>
+  </form>
+</section>
+<section>
+  <div class="divider">❦</div>
+  <h2 class="script">Ucapan & Doa</h2>
+  <form onsubmit="return submitWish(event)">
+    <input type="text" id="wishName" placeholder="Nama Anda" required>
+    <textarea id="wishText" placeholder="Tulis ucapan & doa..." required></textarea>
+    <button type="submit" class="btn-submit">Kirim Ucapan 💌</button>
+  </form>
+  <div id="wishList" style="margin-top:20px">
+    <div class="wish"><div class="w-name">Keluarga Besar</div><div class="w-text">Barakallahu laka wa baraka alaika wa jama'a bainakuma fii khair. Selamat menempuh hidup baru!</div></div>
+  </div>
+</section>
+<footer>
+  <div class="divider">❦</div>
+  <h2 class="script">Terima Kasih</h2>
+  <p class="body">Atas kehadiran dan doa restunya, kami mengucapkan terima kasih yang sebesar-besarnya.</p><br>
+  <h2 class="script" style="font-size:36px">Dimas & Ayu</h2>
+  <p style="color:#666;font-size:12px;margin-top:30px">Dibuat dengan ❤️ oleh Muse untuk Bosku</p>
+</footer>
+<script>
+document.getElementById('btnOpen').addEventListener('click',function(){document.getElementById('cover').classList.add('open');document.body.style.overflow='auto';});
+document.body.style.overflow='hidden';
+const qp=new URLSearchParams(location.search);const to=qp.get('to');
+if(to)document.querySelector('.guest').textContent=decodeURIComponent(to);
+const target=new Date('2026-12-20T08:00:00+07:00').getTime();
+function upd(){const d=target-Date.now();if(d<0)return;
+document.getElementById('cd-d').textContent=String(Math.floor(d/864e5)).padStart(2,'0');
+document.getElementById('cd-h').textContent=String(Math.floor(d/36e5)%24).padStart(2,'0');
+document.getElementById('cd-m').textContent=String(Math.floor(d/6e4)%60).padStart(2,'0');
+document.getElementById('cd-s').textContent=String(Math.floor(d/1e3)%60).padStart(2,'0');}
+setInterval(upd,1000);upd();
+function copyRek(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>alert('Nomor rekening tersalin!'));}
+function submitRSVP(e){e.preventDefault();alert('Terima kasih '+document.getElementById('rsvpName').value+'! Konfirmasi tercatat.');e.target.reset();return false;}
+function submitWish(e){e.preventDefault();const n=document.getElementById('wishName').value;const t=document.getElementById('wishText').value;const d=document.createElement('div');d.className='wish';d.innerHTML='<div class="w-name">'+n.replace(/</g,'&lt;')+'</div><div class="w-text">'+t.replace(/</g,'&lt;')+'</div>';document.getElementById('wishList').prepend(d);e.target.reset();return false;}
+</script>
+</body>
+</html>
