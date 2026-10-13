@@ -131,7 +131,36 @@ body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:va
 .empty .e-emoji{font-size:60px;margin-bottom:15px}
 .page{display:none}
 .page.active{display:block}
-@media(max-width:600px){.p-grid{grid-template-columns:repeat(2,1fr)}.banner h1{font-size:22px}.pd-wrap{padding:15px}}
+@media(max-width:600px){
+.p-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+.banner{padding:25px 18px}.banner h1{font-size:22px}.banner .b-emoji{font-size:44px}
+.pd-wrap{padding:15px;flex-direction:column}
+.pd-img{font-size:90px}
+.pd-actions .btn{flex:1;padding:12px 8px;font-size:13px}
+/* header jadi 2 baris */
+.header .wrap{flex-wrap:wrap;gap:10px}
+.logo{font-size:22px}
+.searchbar{order:3;flex-basis:100%;max-width:none}
+.h-icons{gap:12px;margin-left:auto}
+.h-icons .ic{font-size:21px}
+.user-menu{font-size:12px}
+/* topbar ringkas */
+.topbar .wrap div:last-child a:not(:first-child){display:none}
+/* modal hampir fullscreen */
+.modal-bg{padding:8px;align-items:flex-start}
+.modal{max-height:94vh;border-radius:8px}
+.pd-info h2{font-size:16px}
+.pd-price .now{font-size:22px}
+/* drawer full */
+.drawer{width:100vw;max-width:100vw}
+/* checkout & order */
+.co-section{padding:15px}
+.sec-title{font-size:16px}
+.flash-head{flex-wrap:wrap}
+.auth-form{padding:0 18px 18px}
+.p-name{font-size:12px}
+.p-price{font-size:14px}
+}
 </style>
 </head>
 <body>
