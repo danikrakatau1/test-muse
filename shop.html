@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR STORE - Belanja Online Termurah</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#ee4d2d;--primary-dark:#d73211;--bg:#f5f5f5;--text:#333;--muted:#999;--border:#e8e8e8;--gold:#ffce3d;--green:#00bfa5}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+/* ===== HEADER ===== */
+.topbar{background:var(--primary);color:#fff;font-size:12px;padding:6px 0}
+.topbar .wrap{max-width:1200px;margin:0 auto;padding:0 15px;display:flex;justify-content:space-between}
+.topbar a{color:#fff;text-decoration:none;margin-left:15px}
+.header{background:var(--primary);padding:12px 0 18px;position:sticky;top:0;z-index:100}
+.header .wrap{max-width:1200px;margin:0 auto;padding:0 15px;display:flex;align-items:center;gap:20px}
+.logo{color:#fff;font-size:28px;font-weight:800;cursor:pointer;white-space:nowrap}
+.logo span{font-weight:300}
+.searchbar{flex:1;display:flex;background:#fff;border-radius:3px;overflow:hidden;max-width:700px}
+.searchbar input{flex:1;border:none;padding:10px 15px;font-size:14px;outline:none}
+.searchbar button{background:#fff;border:none;padding:0 20px;cursor:pointer;font-size:18px;color:var(--primary)}
+.h-icons{display:flex;gap:18px;align-items:center;color:#fff}
+.h-icons .ic{position:relative;cursor:pointer;font-size:24px}
+.h-icons .badge{position:absolute;top:-8px;right:-8px;background:#fff;color:var(--primary);font-size:11px;font-weight:700;border-radius:10px;padding:1px 6px;border:2px solid var(--primary)}
+.user-menu{color:#fff;cursor:pointer;font-size:13px;white-space:nowrap}
+/* ===== NAV CATS ===== */
+.catnav{background:#fff;border-bottom:1px solid var(--border)}
+.catnav .wrap{max-width:1200px;margin:0 auto;padding:0 15px;display:flex;gap:25px;overflow-x:auto;font-size:13px}
+.catnav a{padding:10px 0;color:#555;text-decoration:none;white-space:nowrap;cursor:pointer}
+.catnav a:hover,.catnav a.active{color:var(--primary);border-bottom:2px solid var(--primary)}
+/* ===== MAIN ===== */
+.main{max-width:1200px;margin:15px auto;padding:0 15px;min-height:60vh}
+/* Banner */
+.banner{background:linear-gradient(135deg,#ee4d2d,#ff7337);border-radius:8px;color:#fff;padding:40px 30px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center}
+.banner h1{font-size:32px;margin-bottom:8px}
+.banner p{opacity:.9}
+.banner .b-emoji{font-size:70px}
+/* Flash sale */
+.flash{background:#fff;border-radius:8px;padding:15px;margin-bottom:15px}
+.flash-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.flash-head h2{color:var(--primary);font-size:18px}
+.flash-timer{background:#000;color:#fff;padding:3px 8px;border-radius:4px;font-weight:700;font-size:14px}
+/* Product grid */
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.p-card{background:#fff;border-radius:6px;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s;border:1px solid transparent;position:relative}
+.p-card:hover{transform:translateY(-3px);box-shadow:0 4px 15px rgba(0,0,0,.12);border-color:var(--primary)}
+.p-img{aspect-ratio:1;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:60px;position:relative}
+.p-discount{position:absolute;top:0;right:0;background:#ffe97a;color:var(--primary);font-size:11px;font-weight:700;padding:3px 6px;border-radius:0 0 0 6px}
+.p-body{padding:10px}
+.p-name{font-size:13px;height:36px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:6px}
+.p-price{color:var(--primary);font-weight:700;font-size:16px}
+.p-price small{font-size:11px}
+.p-old{color:var(--muted);font-size:11px;text-decoration:line-through}
+.p-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.p-rating{color:var(--gold)}
+.sec-title{font-size:18px;margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--primary);display:inline-block}
+/* ===== PRODUCT DETAIL MODAL ===== */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:15px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:10px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:10px;right:15px;font-size:24px;cursor:pointer;color:#999;z-index:5}
+.pd-wrap{display:flex;gap:25px;padding:25px;flex-wrap:wrap}
+.pd-img{flex:1;min-width:250px;aspect-ratio:1;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:120px}
+.pd-info{flex:1;min-width:280px}
+.pd-info h2{font-size:20px;margin-bottom:10px}
+.pd-stats{display:flex;gap:15px;font-size:13px;color:var(--muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.pd-price{background:#fafafa;padding:15px;border-radius:6px;margin-bottom:15px}
+.pd-price .now{color:var(--primary);font-size:28px;font-weight:800}
+.pd-price .old{color:var(--muted);text-decoration:line-through;margin-left:10px}
+.pd-row{margin-bottom:12px}
+.pd-row .lbl{color:var(--muted);font-size:13px;margin-bottom:6px}
+.variant{display:inline-block;border:1px solid var(--border);padding:8px 15px;margin:0 8px 8px 0;border-radius:4px;cursor:pointer;font-size:13px}
+.variant.sel{border-color:var(--primary);color:var(--primary);background:#fff5f3}
+.qty-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:4px;width:fit-content}
+.qty-ctrl button{width:32px;height:32px;border:none;background:#fff;cursor:pointer;font-size:16px}
+.qty-ctrl span{padding:0 15px;font-weight:600}
+.pd-actions{display:flex;gap:10px;margin-top:20px}
+.btn{padding:12px 25px;border-radius:4px;cursor:pointer;font-size:14px;font-weight:600;border:1px solid var(--primary);transition:.2s}
+.btn-outline{background:#fff5f3;color:var(--primary)}
+.btn-outline:hover{background:#ffe8e0}
+.btn-solid{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn-solid:hover{background:var(--primary-dark)}
+/* ===== CART DRAWER ===== */
+.drawer{position:fixed;top:0;right:-400px;width:380px;max-width:90vw;height:100vh;background:#fff;z-index:300;transition:right .3s;display:flex;flex-direction:column;box-shadow:-2px 0 10px rgba(0,0,0,.15)}
+.drawer.show{right:0}
+.drawer-head{padding:15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:16px}
+.drawer-body{flex:1;overflow-y:auto;padding:15px}
+.drawer-foot{padding:15px;border-top:1px solid var(--border)}
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.cart-item .ci-img{width:70px;height:70px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.cart-item .ci-info{flex:1}
+.cart-item .ci-name{font-size:13px;margin-bottom:4px}
+.cart-item .ci-var{font-size:12px;color:var(--muted)}
+.cart-item .ci-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.cart-item .ci-price{color:var(--primary);font-weight:700}
+.ci-del{color:var(--muted);cursor:pointer;font-size:18px}
+.total-row{display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-bottom:12px}
+.total-row span:last-child{color:var(--primary)}
+/* ===== CHECKOUT ===== */
+.co-section{background:#fff;border-radius:8px;padding:20px;margin-bottom:15px}
+.co-section h3{margin-bottom:15px;font-size:16px}
+.addr-card{border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px;cursor:pointer}
+.addr-card.sel{border-color:var(--primary);background:#fff5f3}
+.ship-opt,.pay-opt{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:8px;cursor:pointer}
+.ship-opt.sel,.pay-opt.sel{border-color:var(--primary);background:#fff5f3}
+.co-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.co-item .ci-img{width:50px;height:50px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px}
+/* ===== ORDERS ===== */
+.order-card{background:#fff;border-radius:8px;padding:15px;margin-bottom:12px}
+.order-head{display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.order-status{font-weight:700}
+.st-pending{color:#f59e0b}.st-shipped{color:#3b82f6}.st-done{color:#10b981}.st-cancel{color:#ef4444}
+.order-item{display:flex;gap:10px;font-size:13px;padding:8px 0}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:4px;cursor:pointer;border:1px solid var(--border);background:#fff}
+.btn-sm.danger{color:#ef4444;border-color:#ef4444}
+.btn-sm.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* ===== AUTH MODAL ===== */
+.auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px}
+.auth-tabs div{flex:1;text-align:center;padding:12px;cursor:pointer;font-weight:600;color:var(--muted)}
+.auth-tabs div.active{color:var(--primary);border-bottom:2px solid var(--primary)}
+.auth-form{padding:0 25px 25px}
+.auth-form input{width:100%;padding:12px;margin-bottom:12px;border:1px solid var(--border);border-radius:4px;font-size:14px}
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:#fff;padding:12px 25px;border-radius:6px;z-index:999;transition:transform .3s;font-size:14px;opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* ===== FOOTER ===== */
+.footer{background:#fff;margin-top:30px;padding:30px 0;border-top:3px solid var(--primary)}
+.footer .wrap{max-width:1200px;margin:0 auto;padding:0 15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;font-size:13px;color:#666}
+.footer h4{margin-bottom:10px;color:#333}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .e-emoji{font-size:60px;margin-bottom:15px}
+.page{display:none}
+.page.active{display:block}
+@media(max-width:600px){.p-grid{grid-template-columns:repeat(2,1fr)}.banner h1{font-size:22px}.pd-wrap{padding:15px}}
+</style>
+</head>
+<body>
+<!-- TOPBAR -->
+<div class="topbar"><div class="wrap">
+<div><a href="#">📱 Download App</a><a href="#">🤝 Jadi Seller</a></div>
+<div><a href="#" onclick="showPage('orders')">📦 Lacak Pesanan</a><a href="#">🔔 Notifikasi</a><a href="#">🌐 ID</a></div>
+</div></div>
+<!-- HEADER -->
+<div class="header"><div class="wrap">
+<div class="logo" onclick="showPage('home')">AR<span>STORE</span></div>
+<div class="searchbar"><input id="searchInput" placeholder="Cari celana, kulot, jeans..." onkeyup="if(event.key==='Enter')doSearch()"><button onclick="doSearch()">🔍</button></div>
+<div class="h-icons">
+<div class="ic" onclick="toggleCart()">🛒<span class="badge" id="cartBadge">0</span></div>
+<div class="user-menu" id="userMenu" onclick="openAuth()">👤 Masuk</div>
+</div>
+</div></div>
+<!-- CAT NAV -->
+<div class="catnav"><div class="wrap" id="catNav"></div></div>
+<!-- MAIN -->
+<div class="main">
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+<div class="banner"><div><h1>🔥 Promo 10.10</h1><p>Diskon s/d 90% + Gratis Ongkir!</p></div><div class="b-emoji">🛍️</div></div>
+<div class="flash"><div class="flash-head"><h2>⚡ FLASH SALE</h2><div class="flash-timer" id="flashTimer">02:00:00</div></div><div class="p-grid" id="flashGrid"></div></div>
+<div class="sec-title">🛒 Rekomendasi Untukmu</div>
+<div class="p-grid" id="productGrid"></div>
+</div>
+<!-- CHECKOUT PAGE -->
+<div id="page-checkout" class="page">
+<div class="sec-title">💳 Checkout</div>
+<div class="co-section"><h3>📍 Alamat Pengiriman</h3><div id="addrList"></div>
+<button class="btn-sm" onclick="addAddress()">+ Tambah Alamat</button></div>
+<div class="co-section"><h3>🚚 Pilih Pengiriman</h3><div id="shipList"></div></div>
+<div class="co-section"><h3>💰 Metode Pembayaran</h3><div id="payList"></div></div>
+<div class="co-section"><h3>📦 Ringkasan Pesanan</h3><div id="coItems"></div>
+<div class="total-row" style="margin-top:15px"><span>Total Bayar</span><span id="coTotal">Rp0</span></div>
+<button class="btn btn-solid" style="width:100%" onclick="placeOrder()">Buat Pesanan</button></div>
+</div>
+<!-- ORDERS PAGE -->
+<div id="page-orders" class="page">
+<div class="sec-title">📦 Pesanan Saya</div>
+<div id="orderTabs" style="display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap"></div>
+<div id="orderList"></div>
+</div>
+<!-- PROFILE PAGE -->
+<div id="page-profile" class="page">
+<div class="sec-title">👤 Profil Saya</div>
+<div class="co-section" id="profileInfo"></div>
+</div>
+</div>
+<!-- PRODUCT MODAL -->
+<div class="modal-bg" id="productModal"><div class="modal">
+<span class="modal-close" onclick="closeModal('productModal')">×</span>
+<div class="pd-wrap" id="pdContent"></div>
+</div></div>
+<!-- AUTH MODAL -->
+<div class="modal-bg" id="authModal"><div class="modal" style="max-width:400px">
+<span class="modal-close" onclick="closeModal('authModal')">×</span>
+<div class="auth-tabs"><div id="tabLogin" class="active" onclick="switchAuth('login')">Masuk</div><div id="tabReg" onclick="switchAuth('reg')">Daftar</div></div>
+<div class="auth-form" id="loginForm">
+<input id="liEmail" placeholder="Email / No. HP">
+<input id="liPass" type="password" placeholder="Password">
+<button class="btn btn-solid" style="width:100%" onclick="doLogin()">MASUK</button>
+</div>
+<div class="auth-form" id="regForm" style="display:none">
+<input id="rgName" placeholder="Nama Lengkap">
+<input id="rgEmail" placeholder="Email">
+<input id="rgPass" type="password" placeholder="Password">
+<button class="btn btn-solid" style="width:100%" onclick="doRegister()">DAFTAR</button>
+</div>
+</div></div>
+<!-- CART DRAWER -->
+<div class="drawer" id="cartDrawer">
+<div class="drawer-head"><span>🛒 Keranjang (<span id="cartCount">0</span>)</span><span style="cursor:pointer" onclick="toggleCart()">×</span></div>
+<div class="drawer-body" id="cartItems"></div>
+<div class="drawer-foot"><div class="total-row"><span>Total</span><span id="cartTotal">Rp0</span></div>
+<button class="btn btn-solid" style="width:100%" onclick="goCheckout()">Checkout</button></div>
+</div>
+<div class="toast" id="toast"></div>
+<!-- FOOTER -->
+<div class="footer"><div class="wrap">
+<div><h4>AR STORE</h4><p>Toko celana wanita terpercaya. Kualitas premium, harga bersahabat.</p></div>
+<div><h4>Layanan</h4><p>Bantuan<br>Lacak Pesanan<br>Pengembalian</p></div>
+<div><h4>Tentang</h4><p>Tentang Kami<br>Karier<br>Kebijakan Privasi</p></div>
+<div><h4>Pembayaran</h4><p>🏦 Transfer Bank<br>💳 Kartu Kredit<br>📱 E-Wallet<br>🏪 Gerai Retail</p></div>
+</div></div>
+<script>
+/* ===== DATA ===== */
+const PRODUCTS=[
+{id:1,name:"Kulot Abstrak Premium - Celana Kulot Wanita Motif",price:39999,old:79999,disc:50,rating:4.6,sold:"1,2RB",emoji:"👖",cat:"Kulot",flash:true,colors:["Hitam","Navy","Maroon"],sizes:["S","M","L","XL"],desc:"Kulot premium bahan rayon adem, motif abstrak eksklusif. Nyaman dipakai seharian."},
+{id:2,name:"Everyday Pants - Celana Harian Wanita Nyaman",price:45999,old:89999,disc:49,rating:4.8,sold:"856",emoji:"👚",cat:"Celana Panjang",flash:true,colors:["Cream","Hitam","Grey"],sizes:["S","M","L"],desc:"Celana harian bahan katun stretch, cocok untuk aktivitas sehari-hari."},
+{id:3,name:"Lavie Pants - Celana Highwaist Wanita Kekinian",price:52999,old:99999,disc:47,rating:4.7,sold:"623",emoji:"👗",cat:"Celana Panjang",flash:true,colors:["Beige","Hitam","Olive"],sizes:["M","L","XL"],desc:"Highwaist pants kekinian, potongan slim yang bikin kaki terlihat jenjang."},
+{id:4,name:"Baggy Jeans Wanita - Celana Jeans Longgar Premium",price:89999,old:149999,disc:40,rating:4.9,sold:"445",emoji:"👖",cat:"Jeans",flash:false,colors:["Light Blue","Dark Blue"],sizes:["27","28","29","30"],desc:"Baggy jeans bahan denim premium, model longgar yang lagi hits."},
+{id:5,name:"Kulot Plisket - Celana Plisket Wanita Elegan",price:34999,old:69999,disc:50,rating:4.5,sold:"789",emoji:"🥻",cat:"Kulot",flash:true,colors:["Hitam","Coksu","Abu"],sizes:["All Size"],desc:"Kulot plisket elegan, cocok untuk acara formal maupun santai."},
+{id:6,name:"Cargo Pants Wanita - Celana Cargo 6 Saku",price:64999,old:119999,disc:46,rating:4.6,sold:"312",emoji:"🎖️",cat:"Celana Panjang",flash:false,colors:["Army","Hitam","Cream"],sizes:["S","M","L","XL"],desc:"Cargo pants dengan 6 saku fungsional, gaya streetwear kekinian."},
+{id:7,name:"Wide Leg Pants - Celana Wide Leg Linen Premium",price:59999,old:109999,disc:45,rating:4.7,sold:"528",emoji:"👘",cat:"Celana Panjang",flash:false,colors:["Putih","Sage","Terracotta"],sizes:["S","M","L"],desc:"Wide leg pants bahan linen premium, adem dan flowy."},
+{id:8,name:"Mom Jeans Highwaist - Celana Jeans Vintage",price:75999,old:129999,disc:42,rating:4.8,sold:"367",emoji:"👖",cat:"Jeans",flash:false,colors:["Vintage Blue","Black"],sizes:["27","28","29"],desc:"Mom jeans vintage ala 90an, highwaist yang nyaman banget."}
+];
+const CATS=["Semua","Kulot","Celana Panjang","Jeans"];
+const SHIPS=[{id:"reg",name:"Reguler",eta:"2-4 hari",cost:10000},{id:"exp",name:"Express",eta:"1-2 hari",cost:20000},{id:"same",name:"Same Day",eta:"6-12 jam",cost:35000}];
+const PAYS=[{id:"tf",name:"🏦 Transfer Bank",desc:"BCA, Mandiri, BRI, BNI"},{id:"ew",name:"📱 E-Wallet",desc:"OVO, GoPay, DANA, ShopeePay"},{id:"cc",name:"💳 Kartu Kredit",desc:"Visa, Mastercard"},{id:"cod",name:"💵 COD",desc:"Bayar di tempat"}];
+/* ===== HELPERS ===== */
+const $=id=>document.getElementById(id);
+const rp=n=>"Rp"+n.toLocaleString("id-ID");
+const store={
+ get:(k,d)=>{try{const v=localStorage.getItem("ar_"+k);return v?JSON.parse(v):d}catch(e){return d}},
+ set:(k,v)=>localStorage.setItem("ar_"+k,JSON.stringify(v))
+};
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2000)}
+function star(r){return "★".repeat(Math.round(r))+"☆".repeat(5-Math.round(r))}
+/* ===== STATE ===== */
+let cart=store.get("cart",[]);
+let user=store.get("user",null);
+let orders=store.get("orders",[]);
+let addresses=store.get("addrs",[]);
+let curCat="Semua",curSearch="",selShip="reg",selPay="tf",selAddr=0;
+/* ===== RENDER ===== */
+function renderCats(){
+ $("catNav").innerHTML=CATS.map(c=>`<a class="${c===curCat?'active':''}" onclick="setCat('${c}')">${c}</a>`).join("");
+}
+function setCat(c){curCat=c;renderCats();renderProducts()}
+function pCard(p){
+ return `<div class="p-card" onclick="openProduct(${p.id})">
+ <div class="p-img">${p.emoji}${p.disc?`<span class="p-discount">-${p.disc}%</span>`:""}</div>
+ <div class="p-body"><div class="p-name">${p.name}</div>
+ <div><span class="p-price"><small>Rp</small>${p.price.toLocaleString("id-ID")}</span> <span class="p-old">${rp(p.old)}</span></div>
+ <div class="p-meta"><span class="p-rating">${star(p.rating)} ${p.rating}</span><span>Terjual ${p.sold}</span></div>
+ </div></div>`;
+}
+function filtered(){
+ return PRODUCTS.filter(p=>(curCat==="Semua"||p.cat===curCat)&&(p.name.toLowerCase().includes(curSearch.toLowerCase())));
+}
+function renderProducts(){
+ $("productGrid").innerHTML=filtered().map(pCard).join("")||`<div class="empty"><div class="e-emoji">🔍</div><p>Produk tidak ditemukan</p></div>`;
+ $("flashGrid").innerHTML=PRODUCTS.filter(p=>p.flash).map(pCard).join("");
+}
+function doSearch(){curSearch=$("searchInput").value;renderProducts()}
+/* ===== PRODUCT DETAIL ===== */
+let curP=null,selColor="",selSize=0,selQty=1;
+function openProduct(id){
+ curP=PRODUCTS.find(p=>p.id===id);selColor=curP.colors[0];selSize=curP.sizes[0];selQty=1;
+ $("pdContent").innerHTML=`
+ <div class="pd-img">${curP.emoji}</div>
+ <div class="pd-info"><h2>${curP.name}</h2>
+ <div class="pd-stats"><span class="p-rating">${star(curP.rating)} ${curP.rating}</span><span>|</span><span>Terjual ${curP.sold}</span></div>
+ <div class="pd-price"><span class="now">${rp(curP.price)}</span><span class="old">${rp(curP.old)}</span><span class="p-discount" style="position:static;border-radius:4px;margin-left:8px">-${curP.disc}%</span></div>
+ <div class="pd-row"><div class="lbl">Warna</div><div id="pdColors">${curP.colors.map(c=>`<span class="variant ${c===selColor?'sel':''}" onclick="pickColor('${c}')">${c}</span>`).join("")}</div></div>
+ <div class="pd-row"><div class="lbl">Ukuran</div><div id="pdSizes">${curP.sizes.map(s=>`<span class="variant ${s===selSize?'sel':''}" onclick="pickSize('${s}')">${s}</span>`).join("")}</div></div>
+ <div class="pd-row"><div class="lbl">Jumlah</div><div class="qty-ctrl"><button onclick="chQty(-1)">−</button><span id="pdQty">1</span><button onclick="chQty(1)">+</button></div></div>
+ <div class="pd-row"><div class="lbl">Deskripsi</div><p style="font-size:13px;color:#666">${curP.desc}</p></div>
+ <div class="pd-actions"><button class="btn btn-outline" onclick="addToCart(false)">+ Keranjang</button><button class="btn btn-solid" onclick="addToCart(true)">Beli Sekarang</button></div>
+ </div>`;
+ openModal("productModal");
+}
+function pickColor(c){selColor=c;document.querySelectorAll("#pdColors .variant").forEach(v=>v.classList.toggle("sel",v.textContent===c))}
+function pickSize(s){selSize=s;document.querySelectorAll("#pdSizes .variant").forEach(v=>v.classList.toggle("sel",v.textContent===s))}
+function chQty(d){selQty=Math.max(1,Math.min(10,selQty+d));$("pdQty").textContent=selQty}
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+/* ===== CART ===== */
+function addToCart(buyNow){
+ const key=curP.id+"_"+selColor+"_"+selSize;
+ const ex=cart.find(i=>i.key===key);
+ if(ex)ex.qty=Math.min(10,ex.qty+selQty);
+ else cart.push({key,pid:curP.id,color:selColor,size:selSize,qty:selQty});
+ saveCart();closeModal("productModal");toast("Ditambahkan ke keranjang!");
+ if(buyNow){toggleCart(true);setTimeout(goCheckout,400)}
+}
+function saveCart(){store.set("cart",cart);renderCart()}
+function renderCart(){
+ const n=cart.reduce((s,i)=>s+i.qty,0);
+ $("cartBadge").textContent=n;$("cartCount").textContent=n;
+ const total=cart.reduce((s,i)=>{const p=PRODUCTS.find(x=>x.id===i.pid);return s+p.price*i.qty},0);
+ $("cartTotal").textContent=rp(total);
+ $("cartItems").innerHTML=cart.length?cart.map((i,ix)=>{
+  const p=PRODUCTS.find(x=>x.id===i.pid);
+  return `<div class="cart-item"><div class="ci-img">${p.emoji}</div>
+  <div class="ci-info"><div class="ci-name">${p.name}</div><div class="ci-var">${i.color}, ${i.size}</div>
+  <div class="ci-row"><div class="qty-ctrl"><button onclick="cartQty(${ix},-1)">−</button><span>${i.qty}</span><button onclick="cartQty(${ix},1)">+</button></div>
+  <span class="ci-price">${rp(p.price*i.qty)}</span><span class="ci-del" onclick="cartDel(${ix})">🗑️</span></div></div></div>`;
+ }).join(""):`<div class="empty"><div class="e-emoji">🛒</div><p>Keranjang kosong</p></div>`;
+}
+function cartQty(ix,d){cart[ix].qty+=d;if(cart[ix].qty<1)cart.splice(ix,1);else cart[ix].qty=Math.min(10,cart[ix].qty);saveCart()}
+function cartDel(ix){cart.splice(ix,1);saveCart()}
+function toggleCart(force){
+ const d=$("cartDrawer");
+ if(force===true)d.classList.add("show");
+ else d.classList.toggle("show");
+}
+function goCheckout(){
+ if(!cart.length){toast("Keranjang kosong!");return}
+ if(!user){toast("Silakan masuk dulu");openAuth();return}
+ toggleCart();showPage("checkout");renderCheckout();
+}
+/* ===== CHECKOUT ===== */
+function renderCheckout(){
+ if(!addresses.length){addresses=[{name:user.name,phone:"081234567890",addr:"Jl. Melati No. 45, Yogyakarta",label:"Rumah"}];store.set("addrs",addresses)}
+ $("addrList").innerHTML=addresses.map((a,i)=>`<div class="addr-card ${i===selAddr?'sel':''}" onclick="selAddr=${i};renderCheckout()">
+ <b>${a.name}</b> (${a.label})<br>${a.phone}<br>${a.addr}</div>`).join("");
+ $("shipList").innerHTML=SHIPS.map(s=>`<div class="ship-opt ${s.id===selShip?'sel':''}" onclick="selShip='${s.id}';renderCheckout()">
+ <input type="radio" ${s.id===selShip?'checked':''}><div><b>${s.name}</b> <span style="color:#999">(${s.eta})</span><div style="color:var(--primary);font-weight:700">${rp(s.cost)}</div></div></div>`).join("");
+ $("payList").innerHTML=PAYS.map(p=>`<div class="pay-opt ${p.id===selPay?'sel':''}" onclick="selPay='${p.id}';renderCheckout()">
+ <input type="radio" ${p.id===selPay?'checked':''}><div><b>${p.name}</b><div style="color:#999;font-size:12px">${p.desc}</div></div></div>`).join("");
+ const ship=SHIPS.find(s=>s.id===selShip);
+ let sub=0;
+ $("coItems").innerHTML=cart.map(i=>{const p=PRODUCTS.find(x=>x.id===i.pid);sub+=p.price*i.qty;
+  return `<div class="co-item"><div class="ci-img">${p.emoji}</div><div style="flex:1">${p.name}<br><span style="color:#999">${i.color}, ${i.size} × ${i.qty}</span></div><b>${rp(p.price*i.qty)}</b></div>`}).join("")
+  +`<div class="co-item"><div style="flex:1">Ongkos kirim (${ship.name})</div><b>${rp(ship.cost)}</b></div>`;
+ $("coTotal").textContent=rp(sub+ship.cost);
+}
+function addAddress(){
+ const n=prompt("Nama penerima:");if(!n)return;
+ const ph=prompt("No. HP:");if(!ph)return;
+ const ad=prompt("Alamat lengkap:");if(!ad)return;
+ addresses.push({name:n,phone:ph,addr:ad,label:"Rumah"});store.set("addrs",addresses);selAddr=addresses.length-1;renderCheckout();
+}
+function placeOrder(){
+ const ship=SHIPS.find(s=>s.id===selShip),pay=PAYS.find(p=>p.id===selPay);
+ const sub=cart.reduce((s,i)=>s+PRODUCTS.find(x=>x.id===i.pid).price*i.qty,0);
+ const order={id:"AR"+Date.now().toString().slice(-8),date:new Date().toLocaleString("id-ID"),
+  items:JSON.parse(JSON.stringify(cart)),sub,ship:ship.cost,total:sub+ship.cost,
+  shipName:ship.name,payName:pay.name,addr:addresses[selAddr],status:"pending"};
+ orders.unshift(order);store.set("orders",orders);
+ cart=[];saveCart();showPage("orders");renderOrders();toast("Pesanan dibuat! 🎉");
+}
+/* ===== ORDERS ===== */
+let orderFilter="semua";
+function renderOrders(){
+ if(!user){$("orderList").innerHTML=`<div class="empty"><div class="e-emoji">🔒</div><p>Silakan masuk untuk melihat pesanan</p></div>`;return}
+ const tabs=["semua","pending","shipped","done","cancel"];
+ const labels={semua:"Semua",pending:"Dikemas",shipped:"Dikirim",done:"Selesai",cancel:"Dibatalkan"};
+ $("orderTabs").innerHTML=tabs.map(t=>`<button class="btn-sm ${orderFilter===t?'primary':''}" onclick="orderFilter='${t}';renderOrders()">${labels[t]}</button>`).join("");
+ const list=orders.filter(o=>orderFilter==="semua"||o.status===orderFilter);
+ const stTxt={pending:["⏳ Dikemas","st-pending"],shipped:["🚚 Dikirim","st-shipped"],done:["✅ Selesai","st-done"],cancel:["❌ Dibatalkan","st-cancel"]};
+ $("orderList").innerHTML=list.length?list.map(o=>`
+ <div class="order-card"><div class="order-head"><span><b>${o.id}</b> • ${o.date}</span><span class="order-status ${stTxt[o.status][1]}">${stTxt[o.status][0]}</span></div>
+ ${o.items.map(i=>{const p=PRODUCTS.find(x=>x.id===i.pid);return `<div class="order-item"><span style="font-size:24px">${p.emoji}</span><div style="flex:1">${p.name}<br><span style="color:#999">${i.color}, ${i.size} × ${i.qty}</span></div><b>${rp(p.price*i.qty)}</b></div>`}).join("")}
+ <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+ <span style="font-size:12px;color:#999">${o.shipName} • ${o.payName}</span><b style="color:var(--primary)">Total: ${rp(o.total)}</b></div>
+ <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+ ${o.status==="pending"?`<button class="btn-sm danger" onclick="cancelOrder('${o.id}')">Batalkan</button>`:""}
+ ${o.status==="shipped"?`<button class="btn-sm primary" onclick="doneOrder('${o.id}')">Pesanan Diterima</button>`:""}
+ </div></div>`).join(""):`<div class="empty"><div class="e-emoji">📦</div><p>Belum ada pesanan</p></div>`;
+}
+function cancelOrder(id){if(!confirm("Batalkan pesanan ini?"))return;const o=orders.find(x=>x.id===id);o.status="cancel";store.set("orders",orders);renderOrders();toast("Pesanan dibatalkan")}
+function doneOrder(id){const o=orders.find(x=>x.id===id);o.status="done";store.set("orders",orders);renderOrders();toast("Terima kasih! 🎉")}
+/* ===== AUTH ===== */
+function openAuth(){openModal("authModal")}
+function switchAuth(w){
+ $("tabLogin").classList.toggle("active",w==="login");$("tabReg").classList.toggle("active",w==="reg");
+ $("loginForm").style.display=w==="login"?"block":"none";$("regForm").style.display=w==="reg"?"block":"none";
+}
+function doRegister(){
+ const n=$("rgName").value,e=$("rgEmail").value,p=$("rgPass").value;
+ if(!n||!e||!p){toast("Lengkapi semua field!");return}
+ const users=store.get("users",[]);
+ if(users.find(u=>u.email===e)){toast("Email sudah terdaftar!");return}
+ const u={name:n,email:e,pass:btoa(p)};users.push(u);store.set("users",users);
+ user={name:n,email:e};store.set("user",user);afterAuth();toast("Pendaftaran berhasil! 🎉");
+}
+function doLogin(){
+ const e=$("liEmail").value,p=$("liPass").value;
+ const users=store.get("users",[]);
+ const u=users.find(x=>x.email===e&&x.pass===btoa(p));
+ if(!u){toast("Email/password salah!");return}
+ user={name:u.name,email:u.email};store.set("user",user);afterAuth();toast("Selamat datang, "+u.name+"!");
+}
+function afterAuth(){closeModal("authModal");renderUser();if($("page-orders").classList.contains("active"))renderOrders()}
+function renderUser(){
+ $("userMenu").innerHTML=user?`👤 ${user.name.split(" ")[0]} <span style="font-size:11px" onclick="event.stopPropagation();doLogout()">(keluar)</span>`:"👤 Masuk";
+ if(user)$("userMenu").onclick=()=>showPage("profile");
+ else $("userMenu").onclick=openAuth;
+ renderProfile();
+}
+function doLogout(){user=null;store.set("user",null);renderUser();showPage("home");toast("Sampai jumpa!")}
+function renderProfile(){
+ if(!user){$("profileInfo").innerHTML="<p>Silakan masuk dulu</p>";return}
+ const done=orders.filter(o=>o.status==="done").length;
+ $("profileInfo").innerHTML=`<h3>${user.name}</h3><p style="color:#999">${user.email}</p>
+ <div style="display:flex;gap:15px;margin-top:15px">
+ <div style="text-align:center"><b style="font-size:20px">${orders.length}</b><br><span style="color:#999;font-size:12px">Pesanan</span></div>
+ <div style="text-align:center"><b style="font-size:20px">${done}</b><br><span style="color:#999;font-size:12px">Selesai</span></div>
+ <div style="text-align:center"><b style="font-size:20px">${cart.length}</b><br><span style="color:#999;font-size:12px">Keranjang</span></div></div>
+ <button class="btn btn-outline" style="margin-top:15px" onclick="doLogout()">Keluar</button>`;
+}
+/* ===== NAV ===== */
+function showPage(p){
+ document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+ $("page-"+p).classList.add("active");window.scrollTo(0,0);
+ if(p==="orders")renderOrders();
+ if(p==="profile")renderProfile();
+}
+/* ===== FLASH TIMER ===== */
+function tickFlash(){
+ let s=2*3600+Math.floor(Math.random()*600);
+ setInterval(()=>{s--;if(s<0)s=7200;
+  const h=String(Math.floor(s/3600)).padStart(2,"0"),m=String(Math.floor(s%3600/60)).padStart(2,"0"),ss=String(s%60).padStart(2,"0");
+  $("flashTimer").textContent=`${h}:${m}:${ss}`},1000);
+}
+/* ===== INIT ===== */
+renderCats();renderProducts();renderCart();renderUser();tickFlash();
+document.querySelectorAll(".modal-bg").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+</script>
+</body>
+</html>
